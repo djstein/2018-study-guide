@@ -53,14 +53,151 @@ While more objects exisit, they are out of scope for this guide.
 
 Use `typeof` to determine type of a variable. `typeof x`
 
-## Java
+### Execution Context
 
-### Primitive Data Types
+* Lexical Scope
+* Closures
 
-### Primitive Data Structures
+### Hosting, Function & Block Scoping and Function Expressions & Declarations
+
+### Binding (call, bind, apply, and lexical this)
+
+### Object prototypes, constructors and mixins
+
+### Composition and high order funcitons
+
+### Event delegatoin and bubbling
+
+### Type Coercion using typeof, instanceof and Object.proptype.toString
+
+### Asynchronous calls with callbacks, promises, await and async
+
+### When to use fuction declarations and expressions
+
+## React
+
+### Container Component Model
+
+### State
+
+### Context
+
+### High Order Components
+
+### Render Props
+
+### State Management with Redux
+
+### Styling In React
+
+## DOM
+
+### Traversing the DOM
+
+* Finding Nodes:
+* Traversing Up and Down:
+* Traversing Left and Right:
+* Adding Node:
+* Deleting Node:
+* Copying Node:
+* Performance:
+
+## CSS
+
+### Layout
+
+### Responsive Design
+
+### Adaptive Design
+
+### Specificity
+
+### Namespacing and Naming
+
+## HTML
+
+### Semantic Markup
+
+### Tag Attributes
+
+* Disabled
+* Async
+* Defer
+* data-\*
+
+## HTTP Protocol
+
+## REST vs RPC
 
 ## 7 Layers of OSI Model
 
-## Handling of HTTP Requests
+## System Design
 
-## Previous Interview Questions
+### Rendering
+
+* Client Side
+* Server Side
+* Universral Rendering
+
+### Layout
+
+### State Mangament
+
+### Async Flow
+
+### Seperation of Concerns
+
+* Moderl View Controler
+* Model View ViewModel
+* Model View Presenter
+
+### Multi Device Support
+
+### Asset Delivery
+
+## Web Performance
+
+### Critical Rendering Path
+
+### Service Workers
+
+### Image Optimizations
+
+### Lazy Loading and Bundle Splitting
+
+### HTTP/2 and Server Push, Websockets
+
+### Prefetch and Preload
+
+### Browser Layout, Compositing, and Painting
+
+## Security
+
+### JSONP
+
+### CORS
+
+### CSRF
+
+### iFrame Policies
+
+## Time Complexities
+
+### Big O
+
+### Common Runtimes
+
+* O(N)
+* O(N Log N)
+
+## Interview Questions
+
+1. Build the layout for common web applications such as X
+2. Implement widgets like a date picker, carousel, or e-commerce cart
+3. Write a function for debounce
+4. Write a function to clone an object deeply
+
+notes:
+
+* http://bigocheatsheet.com/
+* http://davidshariff.com/blog/preparing-for-a-front-end-web-development-interview-in-2017/
