@@ -55,19 +55,19 @@ Use `typeof` to determine type of a variable. `typeof x`
 
 ### Execution Context
 
-* Lexical Scope:
+#### Lexical Scope:
 - Association of a name to an entity, such as a variable, and where that binding is valid, refered to as scope blocks.
 - JavaScirpt uses a Left-Hand Side lookup for variables.
 - Scope is defined on FUNCTION SCOPE. While it appears to be block scope form use of `{}` a new scope is only created when a new function is defined. Use ES6 `const`, `let`, and `strict` mode to mitigate this.
 
-* Hoisting: 
+#### Hoisting: 
 - During execution, every variable or function gets added to the relative scope
 - Functions are added before variables.
 - A function's only difference from variable hoisting is that it's contents is also added.
 - In a block of code, a variable or function will continually be overriden by the compiler if more instances with the same declaration appear.
 - HOWEVER, it is important to remember that variables declared with `let` will not be hoisted until execution.
 
-* Closure:
+#### Closure:
 - function is able to rememebr and access its lexical scope even when the function is executing outside its lexical scope.
 - a special kind of object that combines two things: a function, and the environment in which that function was created. The environment consists of any local variables that were in-scope at the time that the closure was created.
 
@@ -98,8 +98,107 @@ var val = 'wow';
 boo()
 // wow
 ```
+* closures are best used when using nested functions with ability of `that = this`.
 
-### Binding (call, bind, apply, and lexical this)
+### Controlling `this`
+
+#### lexical this
+- This occurs when we assign this to a variable, typically named that. Thus making any instance of an outer functions `this` available in a child function.
+
+```
+var bar = {
+  val: 'test',
+  info: function() {
+    var that = this;
+    console.log(this.val)
+    nested = function() {
+      // val is not defined in this function scope
+      console.log(that.val)
+    }
+    nested();
+  }
+};
+bar.info()
+// test
+// test
+````
+
+#### .call()
+* Calls a function with a given `this` value and arguments provided individually
+* You can write a method once and then inherit it in another object, without having to rewrite the method for the new object.
+* best used when borrowing method from on object and use it in another.
+
+Chain Constructors for an object
+```
+function Product(name, price) {
+  this.name = name;
+  this.price = price;
+}
+
+function Food(name, price) {
+  Product.call(this, name, price);
+  this.category = 'food';
+}
+
+function Toy(name, price) {
+  Product.call(this, name, price);
+  this.category = 'toy';
+}
+
+var cheese = new Food('feta', 5);
+var fun = new Toy('robot', 40);
+```
+
+Invoke function with context for `this`
+```
+function greet() {
+  var reply = [this.animal, 'typically sleep between', this.sleepDuration].join(' ');
+  console.log(reply);
+}
+
+var obj = {
+  animal: 'cats', sleepDuration: '12 and 16 hours'
+};
+
+greet.call(obj);  // cats typically sleep between 12 and 16 hours
+```
+
+#### .apply()
+
+* Calls a function with a given `this` value, and `arguments` provided as an array.
+* This syntax is almost identical to .call() with the difference being call() accepts an argument list while apply() accepts a single array of arguments
+
+Chain Constructors for an object
+```
+```
+
+With Built in functions
+```
+var numbers = [5, 6, 2, 3, 7];
+var max = Math.max.apply(null, numbers);
+// max -> 7
+```
+* best used when borrowing method from on object and use it in another. especially when values to use are in a constant array.
+
+#### .bind()
+* creates a new function that, when called, has its `this` keyword set to the provided value, followed by a set of arguments prepended to the bound function upon invokation.
+
+```
+var module = {
+  x: 42,
+  getX: function() {
+    return this.x;
+  }
+}
+
+var retrieveX = module.getX;
+console.log(retrieveX()); // The function gets invoked at the global scope
+// expected output: undefined
+
+var boundGetX = retrieveX.bind(module);
+console.log(boundGetX());
+// expected output: 42
+```
 
 ### Object prototypes, constructors and mixins
 
