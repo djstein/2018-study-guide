@@ -55,10 +55,49 @@ Use `typeof` to determine type of a variable. `typeof x`
 
 ### Execution Context
 
-* Lexical Scope
-* Closures
+* Lexical Scope:
+- Association of a name to an entity, such as a variable, and where that binding is valid, refered to as scope blocks.
+- JavaScirpt uses a Left-Hand Side lookup for variables.
+- Scope is defined on FUNCTION SCOPE. While it appears to be block scope form use of `{}` a new scope is only created when a new function is defined. Use ES6 `const`, `let`, and `strict` mode to mitigate this.
 
-### Hosting, Function & Block Scoping and Function Expressions & Declarations
+* Hoisting: 
+- During execution, every variable or function gets added to the relative scope
+- Functions are added before variables.
+- A function's only difference from variable hoisting is that it's contents is also added.
+- In a block of code, a variable or function will continually be overriden by the compiler if more instances with the same declaration appear.
+- HOWEVER, it is important to remember that variables declared with `let` will not be hoisted until execution.
+
+* Closure:
+- function is able to rememebr and access its lexical scope even when the function is executing outside its lexical scope.
+- a special kind of object that combines two things: a function, and the environment in which that function was created. The environment consists of any local variables that were in-scope at the time that the closure was created.
+
+```
+var bar = {
+  val: 'test',
+  info: function() {
+    console.log(this.val)
+    nested = function() {
+      // val is not defined in this function scope
+      console.log(this.val)
+    }
+    nested();
+  }
+};
+bar.info()
+// test
+// undefined
+```
+
+- moving futher, we can define the function `info` to a variable to change it's this scope. It will also evaluate LHS
+```
+...
+var boo = bar.info;
+boo()
+// undefined
+var val = 'wow';
+boo()
+// wow
+```
 
 ### Binding (call, bind, apply, and lexical this)
 
