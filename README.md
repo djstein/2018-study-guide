@@ -202,6 +202,42 @@ console.log(boundGetX());
 
 ### Object prototypes, constructors and mixins
 
+#### Object.prototypes
+- Nearly all obejcts in JS are instances of `Object`
+- Changes to the `Object` protoype object are seen by ALL objects through prototype chaining unless the properties and methods are overwritten further in the chain
+- the most important and non changing method is the `Object.prototype.constructor`, which specifies the function that creates an object's prototype
+- Prototypes are used to make constructors
+```
+var Person = function(name) {
+  this.name = name;
+  this.canTalk = true;
+};
+
+Person.prototype.greet = function() {
+  if (this.canTalk) {
+    console.log('Hi, I am ' + this.name);
+  }
+};
+
+var Employee = function(name, title) {
+  Person.call(this, name);
+  this.title = title;
+};
+
+Employee.prototype = Object.create(Person.prototype);
+Employee.prototype.constructor = Employee;
+
+Employee.prototype.greet = function() {
+  if (this.canTalk) {
+    console.log('Hi, I am ' + this.name + ', the ' + this.title);
+  }
+};
+
+var bob = new Employee('Bob', 'Builder');
+bob.greet();
+// Hi, I am Bob, the Builder
+```
+
 ### Composition and high order funcitons
 
 ### Event delegatoin and bubbling
