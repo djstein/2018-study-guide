@@ -206,36 +206,69 @@ console.log(boundGetX());
 - Nearly all obejcts in JS are instances of `Object`
 - Changes to the `Object` protoype object are seen by ALL objects through prototype chaining unless the properties and methods are overwritten further in the chain
 - the most important and non changing method is the `Object.prototype.constructor`, which specifies the function that creates an object's prototype
+
+#### Constructors
 - Prototypes are used to make constructors
 ```
-var Person = function(name) {
-  this.name = name;
-  this.canTalk = true;
+// Shape - superclass
+function Shape() {
+  this.x = 0;
+  this.y = 0;
+}
+
+// superclass method
+Shape.prototype.move = function(x, y) {
+  this.x += x;
+  this.y += y;
+  console.info('Shape moved.');
 };
 
-Person.prototype.greet = function() {
-  if (this.canTalk) {
-    console.log('Hi, I am ' + this.name);
-  }
+// Rectangle - subclass
+function Rectangle() {
+  Shape.call(this); // call super constructor.
+}
+
+// subclass extends superclass
+Rectangle.prototype = Object.create(Shape.prototype);
+Rectangle.prototype.constructor = Rectangle;
+
+var rect = new Rectangle();
+
+console.log('Is rect an instance of Rectangle?',
+  rect instanceof Rectangle); // true
+console.log('Is rect an instance of Shape?',
+  rect instanceof Shape); // true
+rect.move(1, 1); // Outputs, 'Shape moved.'
+```
+
+#### Mixins
+```
+const chocolate = {
+  hasChocolate: () => true
 };
 
-var Employee = function(name, title) {
-  Person.call(this, name);
-  this.title = title;
+const caramelSwirl = {
+  hasCaramelSwirl: () => true
 };
 
-Employee.prototype = Object.create(Person.prototype);
-Employee.prototype.constructor = Employee;
-
-Employee.prototype.greet = function() {
-  if (this.canTalk) {
-    console.log('Hi, I am ' + this.name + ', the ' + this.title);
-  }
+const pecans = {
+  hasPecans: () => true
 };
 
-var bob = new Employee('Bob', 'Builder');
-bob.greet();
-// Hi, I am Bob, the Builder
+const iceCream = Object.assign({}, chocolate, caramelSwirl, pecans);
+
+// or, if your environment supports object spread...
+const iceCream = {...chocolate, ...caramelSwirl, ...pecans};
+
+console.log(`
+  hasChocolate: ${ iceCream.hasChocolate() }
+  hasCaramelSwirl: ${ iceCream.hasCaramelSwirl() }
+  hasPecans: ${ iceCream.hasPecans() }
+`);
+
+hasChocolate: true
+hasCaramelSwirl: true
+hasPecans: true
 ```
 
 ### Composition and high order funcitons
@@ -375,3 +408,4 @@ notes:
 
 * http://bigocheatsheet.com/
 * http://davidshariff.com/blog/preparing-for-a-front-end-web-development-interview-in-2017/
+* https://medium.com/javascript-scene/functional-mixins-composing-software-ffb66d5e731c
