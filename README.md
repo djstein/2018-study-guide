@@ -242,6 +242,7 @@ rect.move(1, 1); // Outputs, 'Shape moved.'
 ```
 
 #### Mixins
+the process of decomposing an object(s) into a single object so that the final product has access to the deomposed keys value paris.
 ```
 const chocolate = {
   hasChocolate: () => true
@@ -272,12 +273,79 @@ hasPecans: true
 ```
 
 ### Composition and high order funcitons
+Composition is the process of combining two or more functions to produce a new function. They are evaluated from innermost variable and function to outter.
+
+A high order function is one that can:
+- take a function as an argument
+- return a function as a result
+
+Example:
+```
+const twice = (f, v) => f(f(v));
+const add3 = v => v + 3;
+
+twice(add3, 7); // 13
+```
 
 ### Event delegatoin and bubbling
+Event Listener is something that waits for elements in the DOM to be interacted with.
+Examples of events include: load, keydown, mouseover, mouseout, click, change, etc.
+With vanillia JS:
+```
+const handleSumbit = e => {...};
+const button = document.getElementById('submit-button');
+button.addEventListener('click', handleSumbit);
+```
+- event.target: identifies the HTML element on which an event occured
+- event.currentTarget:  refers to the element to which the event listener has been attached
+
+Event Bubbling:
+- when an event is triggered it propigates through all parents until it is caught by an event handler
+- event handlers defined on a parent will apply to child nodes, even those that are added to the DOM after the page loads
 
 ### Type Coercion using typeof, instanceof and Object.proptype.toString
+- typeof: returns a string indicating the type of the operand.
+```
+typeof null === 'object';
+typeof true === 'boolean';
+typeof 3.14 === 'number';
+typeof NaN === 'number';
+typeof Symbol() === 'symbol'
+typeof {a: 1} === 'object';
+typeof [1, 2, 4] === 'object'; // use Array.isArray or Object.prototype.toString.call to differentiate regular objects from arrays
+typeof function() {} === 'function';
+typeof class C {} === 'function';
+typeof Math.sin === 'function';
+typeof new Boolean(true) === 'object'; // Using the new operator results in an object.
+```
+
+- instanceof: tests whether the `proptype` property of a constructor appears anywhere in the prototype chain of an object.
+```
+Syntax: object instanceof constructor
+var simpleStr = 'This is a simple string'; 
+var newStr    = new String('String created with constructor');
+simpleStr instanceof String; // returns false, checks the prototype chain, finds undefined
+newStr    instanceof String; // returns true
+myString  instanceof Object; // returns true
+```
+
+- Object.proptype.toString: every object has a .toString() method that is called when the object is to be represented as a text value or when a String is expected. It can be overwritten to have a custom string valu.
+- If not overwritten it will print "[object type]" where type is the object type.
+```
+var o = new Object();
+o.toString(); // return [object Object]
+```
+
+- Overwritting: new function will be called automatically or implicitly
+```
+function Cat(x){this.x=x};
+c = new Cat('meow');
+Cat.prototype.toString = function makeNoise() {return this.x};
+c.toString() // 'meow'
+```
 
 ### Asynchronous calls with callbacks, promises, await and async
+
 
 ### When to use fuction declarations and expressions
 
