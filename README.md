@@ -346,6 +346,17 @@ c.toString() // 'meow'
 
 ### Asynchronous calls with callbacks, promises, await and async
 
+Callbacks (standard def): a function passed into another function as an argument (aka composition)
+Callbacks (asynchronous): used to continue code execution after an asynchronous operation has completed.
+- Since functions take time to complete, their return value (weither assigned to a variable or not) will be undefined until it completes.
+- Asynchronous callbacks are achieved when a function is provided a function as its final argument. When the function completes with its normal arguments it will then call the second function with its own values.
+*Function A with params X returns Y as argument for Function B.*
+- Use modules to break apart callback functions. (another time http://callbackhell.com/)
+
+Promises
+
+
+Await + Async
 
 ### When to use fuction declarations and expressions
 
