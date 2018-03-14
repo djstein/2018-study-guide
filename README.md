@@ -468,8 +468,27 @@ Benefits:
 - forces the extraction of layout components (sidebar, navbar, grid, etc) using this.props.children in layouts
 - pure components render the exact same based on the given props + state. this allows for custom shallow comparisons  in shouldComponentUpdate() to improve performance
 
-### Lifecycle Methods
+### The Component Lifecycle
+- methods available when components get created and inserted into the DOM, updates, becomes unmounted, or removed.
 
+Mounting: called when instance of component is being created and inserted into the DOM
+constructor(props)
+componentWillMount()
+render()
+componentDidMount() great for requests
+
+Updating: changes to props or state cause component to rerender
+componentWillReceiveProps(nextProps)
+shouldComponentUpdate(nextProps, nextState) returns true or false, to trigger the next two
+componentWillUpdate(nextProps, nextState)
+render()
+componentDidUpdate(prevProps, prevState) good place to do network requests if props are changed
+
+Unmounting: component is being removed from DOM
+componentWillMount() perform cleanup here, cancel network requests, subscriptions, etc
+
+Error Handling: error during rendering, lifecycle method, or constructor of child component
+componentDidCatch() only catches errors lower in the tree, not on itself
 
 ### State
 - object managed within the component
