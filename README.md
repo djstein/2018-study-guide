@@ -71,7 +71,7 @@ Use `typeof` to determine type of a variable. `typeof x`
 - function is able to rememebr and access its lexical scope even when the function is executing outside its lexical scope.
 - a special kind of object that combines two things: a function, and the environment in which that function was created. The environment consists of any local variables that were in-scope at the time that the closure was created.
 
-```
+```javascript
 var bar = {
   val: 'test',
   info: function() {
@@ -89,7 +89,7 @@ bar.info()
 ```
 
 - moving futher, we can define the function `info` to a variable to change it's this scope. It will also evaluate LHS
-```
+```javascript
 ...
 var boo = bar.info;
 boo()
@@ -105,7 +105,7 @@ boo()
 #### lexical this
 - This occurs when we assign this to a variable, typically named that. Thus making any instance of an outer functions `this` available in a child function.
 
-```
+```javascript
 var bar = {
   val: 'test',
   info: function() {
@@ -129,7 +129,7 @@ bar.info()
 * best used when borrowing method from on object and use it in another.
 
 Chain Constructors for an object
-```
+```javascript
 function Product(name, price) {
   this.name = name;
   this.price = price;
@@ -150,7 +150,7 @@ var fun = new Toy('robot', 40);
 ```
 
 Invoke function with context for `this`
-```
+```javascript
 function greet() {
   var reply = [this.animal, 'typically sleep between', this.sleepDuration].join(' ');
   console.log(reply);
@@ -168,12 +168,8 @@ greet.call(obj);  // cats typically sleep between 12 and 16 hours
 * Calls a function with a given `this` value, and `arguments` provided as an array.
 * This syntax is almost identical to .call() with the difference being call() accepts an argument list while apply() accepts a single array of arguments
 
-Chain Constructors for an object
-```
-```
-
 With Built in functions
-```
+```javascript
 var numbers = [5, 6, 2, 3, 7];
 var max = Math.max.apply(null, numbers);
 // max -> 7
@@ -183,7 +179,7 @@ var max = Math.max.apply(null, numbers);
 #### .bind()
 * creates a new function that, when called, has its `this` keyword set to the provided value, followed by a set of arguments prepended to the bound function upon invokation.
 
-```
+```javascript
 var module = {
   x: 42,
   getX: function() {
@@ -209,7 +205,7 @@ console.log(boundGetX());
 
 #### Constructors
 - Prototypes are used to make constructors
-```
+```javascript
 // Shape - superclass
 function Shape() {
   this.x = 0;
@@ -243,7 +239,7 @@ rect.move(1, 1); // Outputs, 'Shape moved.'
 
 #### Mixins
 the process of decomposing an object(s) into a single object so that the final product has access to the deomposed keys value paris.
-```
+```javascript
 const chocolate = {
   hasChocolate: () => true
 };
@@ -279,8 +275,7 @@ A high order function is one that can:
 - take a function as an argument
 - return a function as a result
 
-Example:
-```
+```javascript
 const twice = (f, v) => f(f(v));
 const add3 = v => v + 3;
 
@@ -291,7 +286,7 @@ twice(add3, 7); // 13
 Event Listener is something that waits for elements in the DOM to be interacted with.
 Examples of events include: load, keydown, mouseover, mouseout, click, change, etc.
 With vanillia JS:
-```
+```javascript
 const handleSumbit = e => {...};
 const button = document.getElementById('submit-button');
 button.addEventListener('click', handleSumbit);
@@ -305,7 +300,7 @@ Event Bubbling:
 
 ### Type Coercion using typeof, instanceof and Object.proptype.toString
 - typeof: returns a string indicating the type of the operand.
-```
+```javascript
 typeof null === 'object';
 typeof true === 'boolean';
 typeof 3.14 === 'number';
@@ -320,7 +315,7 @@ typeof new Boolean(true) === 'object'; // Using the new operator results in an o
 ```
 
 - instanceof: tests whether the `proptype` property of a constructor appears anywhere in the prototype chain of an object.
-```
+```javascript
 Syntax: object instanceof constructor
 var simpleStr = 'This is a simple string'; 
 var newStr    = new String('String created with constructor');
@@ -331,13 +326,13 @@ myString  instanceof Object; // returns true
 
 - Object.proptype.toString: every object has a .toString() method that is called when the object is to be represented as a text value or when a String is expected. It can be overwritten to have a custom string valu.
 - If not overwritten it will print "[object type]" where type is the object type.
-```
+```javascript
 var o = new Object();
 o.toString(); // return [object Object]
 ```
 
 - Overwritting: new function will be called automatically or implicitly
-```
+```javascript
 function Cat(x){this.x=x};
 c = new Cat('meow');
 Cat.prototype.toString = function makeNoise() {return this.x};
@@ -362,7 +357,7 @@ Promises have three states:
 2. fulfilled: meaning that the operation completed successfully
 3. rejected: meaning that hte operation failed
 if the Promise moves beyond pending, the then method is called.
-```
+```javascript
 function test() {
   const p1 = new Promise((resolve, reject) => {
     if (x === 1) {
@@ -387,7 +382,7 @@ Await + Async
 - When async functions are called, they return a Promise. When a value or exception is returned the Promise will be resolved with the returned value or thrown error.
 - Async functions can contain await expressions that pauce the execution of the function until the Promise resolves, where it then resumes afterward.
 
-```
+```javascript
 const resolveAfter = x => {
   return new Promise(resolve => {
     setTimeout(() => {
@@ -404,7 +399,7 @@ add(10).then(v => {console.log(v);}); // prints 60 after 4 seconds
 ```
 
 Promise chain to async function:
-```
+```javascript
 const getData = url => {
   return downloadData(url) // returns a promise
   .catch(e => {
@@ -416,7 +411,7 @@ const getData = url => {
 }
 ```
 
-```
+```javascript
 const getData = async url => {
   let v;
   try {
