@@ -346,17 +346,88 @@ c.toString() // 'meow'
 
 ### Asynchronous calls with callbacks, promises, await and async
 
-Callbacks (standard def): a function passed into another function as an argument (aka composition)
-Callbacks (asynchronous): used to continue code execution after an asynchronous operation has completed.
+Callbacks
+- Callbacks (standard def): a function passed into another function as an argument (aka composition)
+- Callbacks (asynchronous): used to continue code execution after an asynchronous operation has completed.
 - Since functions take time to complete, their return value (weither assigned to a variable or not) will be undefined until it completes.
 - Asynchronous callbacks are achieved when a function is provided a function as its final argument. When the function completes with its normal arguments it will then call the second function with its own values.
 *Function A with params X returns Y as argument for Function B.*
 - Use modules to break apart callback functions. (another time http://callbackhell.com/)
 
 Promises
-
+- Promise: a proxy for a value not necessarily known when the promise is created.
+- Lets asynchronous methods return values like synchronous methods, it is returning a promise that the value will be supplied in the future
+Promises have three states:
+1. pending: initial state, neither fulfilled nor rejected
+2. fulfilled: meaning that the operation completed successfully
+3. rejected: meaning that hte operation failed
+if the Promise moves beyond pending, the then method is called.
+```
+function test() {
+  const p1 = new Promise((resolve, reject) => {
+    if (x === 1) {
+      resolve(y);
+    } else {
+      reject('x is not one');
+    }
+  }
+  
+  p1.then(val => {
+    console.log('success: ', val);
+  }).catch(reason => {
+      console.log('error: ', reason);
+  }
+}
+```
 
 Await + Async
+- Async Functions: declare a function as such, returning an AsyncFunction. 
+- Await: operator used to wait for a Promise to move out of the pending state.
+
+- When async functions are called, they return a Promise. When a value or exception is returned the Promise will be resolved with the returned value or thrown error.
+- Async functions can contain await expressions that pauce the execution of the function until the Promise resolves, where it then resumes afterward.
+
+```
+const resolveAfter = x => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resovle(x);
+    }, 2000);
+  });
+}
+const add = async (a) => {
+  const b = await resolveAfter(20);
+  const c = await resolveAfter(30);
+  return a + b + c;
+}
+add(10).then(v => {console.log(v);}); // prints 60 after 4 seconds
+```
+
+Promise chain to async function:
+```
+const getData = url => {
+  return downloadData(url) // returns a promise
+  .catch(e => {
+    return downloadFallbackData(url); // returns a promise
+  })
+  .then(v => {
+      return processDataInWorker(url); // returns a promise
+  });
+}
+```
+
+```
+const getData = async url => {
+  let v;
+  try {
+    v = await downloadData(url);
+  } catch(e) {
+    v = await downloadFallbackData(url);
+  }
+  return processDataInWorker(v);
+}
+```
+- Return statements of async functions are wrapped in Promise.resolve, thus no await is needed on the return line if it is a function or Promise variable.
 
 ### When to use fuction declarations and expressions
 
