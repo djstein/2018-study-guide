@@ -425,6 +425,22 @@ const getData = async url => {
 - Return statements of async functions are wrapped in Promise.resolve, thus no await is needed on the return line if it is a function or Promise variable.
 
 ### When to use fuction declarations and expressions
+Function Declarations: can be called before or after its definition via hoisting
+```
+function foo() {...};
+```
+Named Function Expressions: can only be called after initialized and JIT
+```
+const foo = function bar() {...};
+```
+Anonymous Function Expressions: can only be called after initialized and JIT
+```
+const foo = () => {};
+```
+Immediately-Invoked Function Expressions: 
+```
+((x) => {...})();
+```
 
 ## React
 
