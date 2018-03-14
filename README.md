@@ -426,19 +426,19 @@ const getData = async url => {
 
 ### When to use fuction declarations and expressions
 Function Declarations: can be called before or after its definition via hoisting
-```
+```javascript
 function foo() {...};
 ```
 Named Function Expressions: can only be called after initialized and JIT
-```
+```javascript
 const foo = function bar() {...};
 ```
 Anonymous Function Expressions: can only be called after initialized and JIT
-```
+```javascript
 const foo = () => {};
 ```
 Immediately-Invoked Function Expressions: 
-```
+```javascript
 ((x) => {...})();
 ```
 
