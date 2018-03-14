@@ -446,11 +446,92 @@ Immediately-Invoked Function Expressions:
 
 ### Container Component Model
 
+Container Components:
+- how things work
+- no DOM markup, no styles
+- calls global states / stores
+- data stored in state
+- typically generated from high order components such as connect() from Redux
+
+Presentational Components:
+- how things look
+- no dependenciees to rest of application or global stores
+- written as functional components
+- no data state, can container UI state
+- receive data and callbacks via props
+- allow containment via this.props.children
+
+Benefits:
+- separation of concerns
+- better reusability of presentation components
+- product team can tweak presentational components without changing logic
+- forces the extraction of layout components (sidebar, navbar, grid, etc) using this.props.children in layouts
+- pure components render the exact same based on the given props + state. this allows for custom shallow comparisons  in shouldComponentUpdate() to improve performance
+
+### Lifecycle Methods
+
+
 ### State
+- object managed within the component
+- calling set state merges key value pairs on the objects passed into the current state
 
 ### Context
+- safe context is being developed in React 16.3
+
+Lifecycle methods that recieve additional param when contextTypes is defined:
+- constructor(props, context)
+- componentWillRecieveProps(nextProps, nextContext)
+- shouldComponentUpdate(nextProps, nextState, nextContext)
+- componentWillUpdate(nextProps, nextState, nextContext)
+
+Using childContextTypes and getChildContext, React passed context info to each component in the subtree that accesses contextTypes
+```
+import PropTypes from 'prop-types';
+(stateless functional component version of Button)
+const Button = ({children}, context) => <button style={{background: context.color}}>{children}</button>;
+
+Button.contextTypes = {color: PropTypes.string};
+
+class Message extends React.Component {
+  render() { return (<>{this.props.text} <Button>Delete</Button></>); }
+}
+
+class MessageList extends React.Component {
+  getChildContext() {
+    return {color: "purple"};
+  }
+
+  render() {
+    const children = this.props.messages.map((message) =>
+      <Message text={message.text} />
+    );
+    return <div>{children}</div>;
+  }
+}
+
+MessageList.childContextTypes = {
+  color: PropTypes.string
+};
+```
+
+Such as in React Router 4, a Router sends information to each Link and Route which pass values back to the Router:
+```
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+const Example = () => (
+  <Router>
+    <>
+      <li><Link to="/">Home</Link></li>
+      <li><Link to="/about">About</Link></li>
+
+      <Route exact path="/" component={Home} />
+      <Route path="/about" component={About} />
+    </>
+  </Router>
+);
+```
 
 ### High Order Components
+High Order Components are just functions that take an exisiting component and return another component that wraps it.
 
 ### Render Props
 
