@@ -504,7 +504,7 @@ Lifecycle methods that recieve additional param when contextTypes is defined:
 - componentWillUpdate(nextProps, nextState, nextContext)
 
 Using childContextTypes and getChildContext, React passed context info to each component in the subtree that accesses contextTypes
-```
+```javascript
 import PropTypes from 'prop-types';
 (stateless functional component version of Button)
 const Button = ({children}, context) => <button style={{background: context.color}}>{children}</button>;
@@ -534,7 +534,7 @@ MessageList.childContextTypes = {
 ```
 
 Such as in React Router 4, a Router sends information to each Link and Route which pass values back to the Router:
-```
+```javascript
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 const Example = () => (
   <Router>
@@ -668,6 +668,20 @@ Data from the Application layer is moved throughout the internet via the Transpo
 ## Web Performance
 
 ### Critical Rendering Path
+- Critical Rendering Path: prioritizing display of content that relates to current user action
+Steps to render:
+1. process HTML markup and build DOM tree
+2. process CSS markup and build CSSOM tree
+3. Combine DOM and CSSOM into render tree
+4. run layout on render tree to computer geometry of each node
+5. pain indivial nodes to screen
+
+- Critical Resource: is one that could block intial rendering of the page
+Steps to optimize:
+1. Analyze critical path (number of resources, bytes, length)
+2. Minimize critical resources (mark as async, defer download, remove)
+3. Optimize critical bytes to reduce download time (number of roundtrips)
+4. Optimize order in which critical resouces are downloaded, download all critical early as possible and together
 
 ### Service Workers
 - does not work in Safari
@@ -676,6 +690,11 @@ Data from the Application layer is moved throughout the internet via the Transpo
 ```example: navigator.serviceWorker.registger(url, obj).then({}).catch({});```
 
 ### Image Optimizations
+- for small screens + mobile devices + mobile browsers request images from cache at lower resolution
+- only load images that are .png for Internet usage
+- lazy load images on scrolling
+- remove images where ever possible
+- compress images and store in caches that do no require webserver interaction
 
 ### Lazy Loading and Bundle Splitting
 - Lazy Loading: defer loading of resource until needed. Typically used for images that do not need to be shown if portion of page they will display on is not navigated too. With Webpack we can lazy load JS modules.
