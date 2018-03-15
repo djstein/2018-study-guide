@@ -55,34 +55,502 @@ Use `typeof` to determine type of a variable. `typeof x`
 
 ### Execution Context
 
-* Lexical Scope
-* Closures
+#### Lexical Scope:
+- Association of a name to an entity, such as a variable, and where that binding is valid, refered to as scope blocks.
+- JavaScirpt uses a Left-Hand Side lookup for variables.
+- Scope is defined on FUNCTION SCOPE. While it appears to be block scope form use of `{}` a new scope is only created when a new function is defined. Use ES6 `const`, `let`, and `strict` mode to mitigate this.
 
-### Hosting, Function & Block Scoping and Function Expressions & Declarations
+#### Hoisting: 
+- During execution, every variable or function gets added to the relative scope
+- Functions are added before variables.
+- A function's only difference from variable hoisting is that it's contents is also added.
+- In a block of code, a variable or function will continually be overriden by the compiler if more instances with the same declaration appear.
+- HOWEVER, it is important to remember that variables declared with `let` will not be hoisted until execution.
 
-### Binding (call, bind, apply, and lexical this)
+#### Closure:
+- function is able to rememebr and access its lexical scope even when the function is executing outside its lexical scope.
+- a special kind of object that combines two things: a function, and the environment in which that function was created. The environment consists of any local variables that were in-scope at the time that the closure was created.
+
+```javascript
+var bar = {
+  val: 'test',
+  info: function() {
+    console.log(this.val)
+    nested = function() {
+      // val is not defined in this function scope
+      console.log(this.val)
+    }
+    nested();
+  }
+};
+bar.info()
+// test
+// undefined
+```
+
+- moving futher, we can define the function `info` to a variable to change it's this scope. It will also evaluate LHS
+```javascript
+...
+var boo = bar.info;
+boo()
+// undefined
+var val = 'wow';
+boo()
+// wow
+```
+* closures are best used when using nested functions with ability of `that = this`.
+
+### Controlling `this`
+
+#### lexical this
+- This occurs when we assign this to a variable, typically named that. Thus making any instance of an outer functions `this` available in a child function.
+
+```javascript
+var bar = {
+  val: 'test',
+  info: function() {
+    var that = this;
+    console.log(this.val)
+    nested = function() {
+      // val is not defined in this function scope
+      console.log(that.val)
+    }
+    nested();
+  }
+};
+bar.info()
+// test
+// test
+````
+
+#### .call()
+* Calls a function with a given `this` value and arguments provided individually
+* You can write a method once and then inherit it in another object, without having to rewrite the method for the new object.
+* best used when borrowing method from on object and use it in another.
+
+Chain Constructors for an object
+```javascript
+function Product(name, price) {
+  this.name = name;
+  this.price = price;
+}
+
+function Food(name, price) {
+  Product.call(this, name, price);
+  this.category = 'food';
+}
+
+function Toy(name, price) {
+  Product.call(this, name, price);
+  this.category = 'toy';
+}
+
+var cheese = new Food('feta', 5);
+var fun = new Toy('robot', 40);
+```
+
+Invoke function with context for `this`
+```javascript
+function greet() {
+  var reply = [this.animal, 'typically sleep between', this.sleepDuration].join(' ');
+  console.log(reply);
+}
+
+var obj = {
+  animal: 'cats', sleepDuration: '12 and 16 hours'
+};
+
+greet.call(obj);  // cats typically sleep between 12 and 16 hours
+```
+
+#### .apply()
+
+* Calls a function with a given `this` value, and `arguments` provided as an array.
+* This syntax is almost identical to .call() with the difference being call() accepts an argument list while apply() accepts a single array of arguments
+
+With Built in functions
+```javascript
+var numbers = [5, 6, 2, 3, 7];
+var max = Math.max.apply(null, numbers);
+// max -> 7
+```
+* best used when borrowing method from on object and use it in another. especially when values to use are in a constant array.
+
+#### .bind()
+* creates a new function that, when called, has its `this` keyword set to the provided value, followed by a set of arguments prepended to the bound function upon invokation.
+
+```javascript
+var module = {
+  x: 42,
+  getX: function() {
+    return this.x;
+  }
+}
+
+var retrieveX = module.getX;
+console.log(retrieveX()); // The function gets invoked at the global scope
+// expected output: undefined
+
+var boundGetX = retrieveX.bind(module);
+console.log(boundGetX());
+// expected output: 42
+```
 
 ### Object prototypes, constructors and mixins
 
+#### Object.prototypes
+- Nearly all obejcts in JS are instances of `Object`
+- Changes to the `Object` protoype object are seen by ALL objects through prototype chaining unless the properties and methods are overwritten further in the chain
+- the most important and non changing method is the `Object.prototype.constructor`, which specifies the function that creates an object's prototype
+
+#### Constructors
+- Prototypes are used to make constructors
+```javascript
+// Shape - superclass
+function Shape() {
+  this.x = 0;
+  this.y = 0;
+}
+
+// superclass method
+Shape.prototype.move = function(x, y) {
+  this.x += x;
+  this.y += y;
+  console.info('Shape moved.');
+};
+
+// Rectangle - subclass
+function Rectangle() {
+  Shape.call(this); // call super constructor.
+}
+
+// subclass extends superclass
+Rectangle.prototype = Object.create(Shape.prototype);
+Rectangle.prototype.constructor = Rectangle;
+
+var rect = new Rectangle();
+
+console.log('Is rect an instance of Rectangle?',
+  rect instanceof Rectangle); // true
+console.log('Is rect an instance of Shape?',
+  rect instanceof Shape); // true
+rect.move(1, 1); // Outputs, 'Shape moved.'
+```
+
+#### Mixins
+the process of decomposing an object(s) into a single object so that the final product has access to the deomposed keys value paris.
+```javascript
+const chocolate = {
+  hasChocolate: () => true
+};
+
+const caramelSwirl = {
+  hasCaramelSwirl: () => true
+};
+
+const pecans = {
+  hasPecans: () => true
+};
+
+const iceCream = Object.assign({}, chocolate, caramelSwirl, pecans);
+
+// or, if your environment supports object spread...
+const iceCream = {...chocolate, ...caramelSwirl, ...pecans};
+
+console.log(`
+  hasChocolate: ${ iceCream.hasChocolate() }
+  hasCaramelSwirl: ${ iceCream.hasCaramelSwirl() }
+  hasPecans: ${ iceCream.hasPecans() }
+`);
+
+hasChocolate: true
+hasCaramelSwirl: true
+hasPecans: true
+```
+
 ### Composition and high order funcitons
+Composition is the process of combining two or more functions to produce a new function. They are evaluated from innermost variable and function to outter.
+
+A high order function is one that can:
+- take a function as an argument
+- return a function as a result
+
+```javascript
+const twice = (f, v) => f(f(v));
+const add3 = v => v + 3;
+
+twice(add3, 7); // 13
+```
 
 ### Event delegatoin and bubbling
+Event Listener is something that waits for elements in the DOM to be interacted with.
+Examples of events include: load, keydown, mouseover, mouseout, click, change, etc.
+With vanillia JS:
+```javascript
+const handleSumbit = e => {...};
+const button = document.getElementById('submit-button');
+button.addEventListener('click', handleSumbit);
+```
+- event.target: identifies the HTML element on which an event occured
+- event.currentTarget:  refers to the element to which the event listener has been attached
+
+Event Bubbling:
+- when an event is triggered it propigates through all parents until it is caught by an event handler
+- event handlers defined on a parent will apply to child nodes, even those that are added to the DOM after the page loads
 
 ### Type Coercion using typeof, instanceof and Object.proptype.toString
+- typeof: returns a string indicating the type of the operand.
+```javascript
+typeof null === 'object';
+typeof true === 'boolean';
+typeof 3.14 === 'number';
+typeof NaN === 'number';
+typeof Symbol() === 'symbol'
+typeof {a: 1} === 'object';
+typeof [1, 2, 4] === 'object'; // use Array.isArray or Object.prototype.toString.call to differentiate regular objects from arrays
+typeof function() {} === 'function';
+typeof class C {} === 'function';
+typeof Math.sin === 'function';
+typeof new Boolean(true) === 'object'; // Using the new operator results in an object.
+```
+
+- instanceof: tests whether the `proptype` property of a constructor appears anywhere in the prototype chain of an object.
+```javascript
+Syntax: object instanceof constructor
+var simpleStr = 'This is a simple string'; 
+var newStr    = new String('String created with constructor');
+simpleStr instanceof String; // returns false, checks the prototype chain, finds undefined
+newStr    instanceof String; // returns true
+myString  instanceof Object; // returns true
+```
+
+- Object.proptype.toString: every object has a .toString() method that is called when the object is to be represented as a text value or when a String is expected. It can be overwritten to have a custom string valu.
+- If not overwritten it will print "[object type]" where type is the object type.
+```javascript
+var o = new Object();
+o.toString(); // return [object Object]
+```
+
+- Overwritting: new function will be called automatically or implicitly
+```javascript
+function Cat(x){this.x=x};
+c = new Cat('meow');
+Cat.prototype.toString = function makeNoise() {return this.x};
+c.toString() // 'meow'
+```
 
 ### Asynchronous calls with callbacks, promises, await and async
 
+Callbacks
+- Callbacks (standard def): a function passed into another function as an argument (aka composition)
+- Callbacks (asynchronous): used to continue code execution after an asynchronous operation has completed.
+- Since functions take time to complete, their return value (weither assigned to a variable or not) will be undefined until it completes.
+- Asynchronous callbacks are achieved when a function is provided a function as its final argument. When the function completes with its normal arguments it will then call the second function with its own values.
+*Function A with params X returns Y as argument for Function B.*
+- Use modules to break apart callback functions. (another time http://callbackhell.com/)
+
+Promises
+- Promise: a proxy for a value not necessarily known when the promise is created.
+- Lets asynchronous methods return values like synchronous methods, it is returning a promise that the value will be supplied in the future
+Promises have three states:
+1. pending: initial state, neither fulfilled nor rejected
+2. fulfilled: meaning that the operation completed successfully
+3. rejected: meaning that hte operation failed
+if the Promise moves beyond pending, the then method is called.
+```javascript
+function test() {
+  const p1 = new Promise((resolve, reject) => {
+    if (x === 1) {
+      resolve(y);
+    } else {
+      reject('x is not one');
+    }
+  }
+  
+  p1.then(val => {
+    console.log('success: ', val);
+  }).catch(reason => {
+      console.log('error: ', reason);
+  }
+}
+```
+
+Await + Async
+- Async Functions: declare a function as such, returning an AsyncFunction. 
+- Await: operator used to wait for a Promise to move out of the pending state.
+
+- When async functions are called, they return a Promise. When a value or exception is returned the Promise will be resolved with the returned value or thrown error.
+- Async functions can contain await expressions that pauce the execution of the function until the Promise resolves, where it then resumes afterward.
+
+```javascript
+const resolveAfter = x => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resovle(x);
+    }, 2000);
+  });
+}
+const add = async (a) => {
+  const b = await resolveAfter(20);
+  const c = await resolveAfter(30);
+  return a + b + c;
+}
+add(10).then(v => {console.log(v);}); // prints 60 after 4 seconds
+```
+
+Promise chain to async function:
+```javascript
+const getData = url => {
+  return downloadData(url) // returns a promise
+  .catch(e => {
+    return downloadFallbackData(url); // returns a promise
+  })
+  .then(v => {
+      return processDataInWorker(url); // returns a promise
+  });
+}
+```
+
+```javascript
+const getData = async url => {
+  let v;
+  try {
+    v = await downloadData(url);
+  } catch(e) {
+    v = await downloadFallbackData(url);
+  }
+  return processDataInWorker(v);
+}
+```
+- Return statements of async functions are wrapped in Promise.resolve, thus no await is needed on the return line if it is a function or Promise variable.
+
 ### When to use fuction declarations and expressions
+Function Declarations: can be called before or after its definition via hoisting
+```javascript
+function foo() {...};
+```
+Named Function Expressions: can only be called after initialized and JIT
+```javascript
+const foo = function bar() {...};
+```
+Anonymous Function Expressions: can only be called after initialized and JIT
+```javascript
+const foo = () => {};
+```
+Immediately-Invoked Function Expressions: 
+```javascript
+((x) => {...})();
+```
 
 ## React
 
 ### Container Component Model
 
+Container Components:
+- how things work
+- no DOM markup, no styles
+- calls global states / stores
+- data stored in state
+- typically generated from high order components such as connect() from Redux
+
+Presentational Components:
+- how things look
+- no dependenciees to rest of application or global stores
+- written as functional components
+- no data state, can container UI state
+- receive data and callbacks via props
+- allow containment via this.props.children
+
+Benefits:
+- separation of concerns
+- better reusability of presentation components
+- product team can tweak presentational components without changing logic
+- forces the extraction of layout components (sidebar, navbar, grid, etc) using this.props.children in layouts
+- pure components render the exact same based on the given props + state. this allows for custom shallow comparisons  in shouldComponentUpdate() to improve performance
+
+### The Component Lifecycle
+- methods available when components get created and inserted into the DOM, updates, becomes unmounted, or removed.
+
+Mounting: called when instance of component is being created and inserted into the DOM
+constructor(props)
+componentWillMount()
+render()
+componentDidMount() great for requests
+
+Updating: changes to props or state cause component to rerender
+componentWillReceiveProps(nextProps)
+shouldComponentUpdate(nextProps, nextState) returns true or false, to trigger the next two
+componentWillUpdate(nextProps, nextState)
+render()
+componentDidUpdate(prevProps, prevState) good place to do network requests if props are changed
+
+Unmounting: component is being removed from DOM
+componentWillMount() perform cleanup here, cancel network requests, subscriptions, etc
+
+Error Handling: error during rendering, lifecycle method, or constructor of child component
+componentDidCatch() only catches errors lower in the tree, not on itself
+
 ### State
+- object managed within the component
+- calling set state merges key value pairs on the objects passed into the current state
 
 ### Context
+- safe context is being developed in React 16.3
+
+Lifecycle methods that recieve additional param when contextTypes is defined:
+- constructor(props, context)
+- componentWillRecieveProps(nextProps, nextContext)
+- shouldComponentUpdate(nextProps, nextState, nextContext)
+- componentWillUpdate(nextProps, nextState, nextContext)
+
+Using childContextTypes and getChildContext, React passed context info to each component in the subtree that accesses contextTypes
+```
+import PropTypes from 'prop-types';
+(stateless functional component version of Button)
+const Button = ({children}, context) => <button style={{background: context.color}}>{children}</button>;
+
+Button.contextTypes = {color: PropTypes.string};
+
+class Message extends React.Component {
+  render() { return (<>{this.props.text} <Button>Delete</Button></>); }
+}
+
+class MessageList extends React.Component {
+  getChildContext() {
+    return {color: "purple"};
+  }
+
+  render() {
+    const children = this.props.messages.map((message) =>
+      <Message text={message.text} />
+    );
+    return <div>{children}</div>;
+  }
+}
+
+MessageList.childContextTypes = {
+  color: PropTypes.string
+};
+```
+
+Such as in React Router 4, a Router sends information to each Link and Route which pass values back to the Router:
+```
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+const Example = () => (
+  <Router>
+    <>
+      <li><Link to="/">Home</Link></li>
+      <li><Link to="/about">About</Link></li>
+
+      <Route exact path="/" component={Home} />
+      <Route path="/about" component={About} />
+    </>
+  </Router>
+);
+```
 
 ### High Order Components
+High Order Components are just functions that take an exisiting component and return another component that wraps it.
 
 ### Render Props
 
@@ -126,10 +594,52 @@ Use `typeof` to determine type of a variable. `typeof x`
 * data-\*
 
 ## HTTP Protocol
+HTTP: hypertext transfer protocol
+- Functions as request-response protocol in client-server computing
+HTTP Methods/Verbs: indicate action to be performed on resource.
+- Include GET, POST, PATCH, PUT, DELETE.
+- One resource (URL) can have multiple methods
+- HTTP requests say give me this or do something on a server.
+- HTTP response says I did this or take this <resource> with success/error messaging.
+Status Codes:
+  1. Informational 1XX
+  2. Successful 2XX: 200 OK
+  3. Reidrection 3XX: 304 Not Modified (cached asset has not changed)
+  4. Client Error 4XX: 404 Not Found
+  5. Server Error 5XX: 500 Internal Service Error
 
 ## REST vs RPC
+RPC is designed in URL structure to have a seperate resource available for each action
+REST supplies multiple actions TO the resource for an "object"
+RPC:
+```
+localtest.me:8000/order/create // post with data
+localtest.me:8000/order/get?id=1 // get with query params
+localtest.me:8000/order/update?id=1 // patch with query param and data
+localtest.me:8000/order/delete?id=1 // delete with query param
+```
+REST:
+```
+localtest.me:8000/order/ // post with data, or get all orders
+localtest.me:8000/order/1/ // get detail view, or delete, or patch
+```
 
 ## 7 Layers of OSI Model
+
+Internet Protocol Suite:
+1. Application
+2. Transport
+3. Internet
+4. Link
+Data from the Application layer is moved throughout the internet via the Transport layer. TCP/UDP packets wrap HTTP and are moved along via the Internet and Link Layers.
+
+1. Physical: ie. Ethernet
+2. Data Link: node to node data transfer, how two nodes directly communicate. ie. MAC
+3. Network: provides means to transfer datagramsby establishing use routing and address management protocols
+4. Transport: UDP, TCP handles sending data and recovering from errors
+5. Session: Manage connection between computers (server to user)
+6. Presentation: user has semantic / affordance that effects application
+7. Application: Software that communicates over network
 
 ## System Design
 
@@ -173,31 +683,36 @@ Use `typeof` to determine type of a variable. `typeof x`
 
 ## Security
 
-### JSONP
+### JSON with Padding (JSONP)
+- basically never do this dumb ass shit (how CSRF problems came about)
+- used to bypass Cross-Domain policies in web browsers
+- use script tag to pass JSON data back to a function and evaluate it
 
-### CORS
+### Cross-Origin Resource Sharing (CORS) aka HTTP Access Control
+- allowing clinets to interact with APIs that are hosted on different domains.
+- CORS works by requiring the server to include set of HTTP Headers that allow a browser to deterine if and when cross-domain requests should be allowed.
+- Modern browsers and servers block Cross-Origin HTTP Requests (XHTTP) by default and we must supply specific IP Address / clients / domains that we will allow.
 
-### CSRF
+### Cross Site Request Forgery (CSRF)
+- type of attack which can occur when a user has not logged out of a site, and continues to have a valid session. Malicious site may be able to perform actions against target site within context of logged in session.
+- CSRF Tokens should always be required in HTTP Headers, Cookies, POST data, OR in Session data.
 
 ### iFrame Policies
+- essentially Cross-Origin iFrames can display information being added to them, but will not share that information with the window/DOM it is in unless specified.
+- the parent window can also know about user actions on the iFrame such as blur, focus, etc
+- Example: Typing in a Stripe Elements form. We know the iFrame is active but not what is being sent into the iFrame
 
 ## Time Complexities
 
 ### Big O
+![alt text](https://github.com/djstein/study-guide/ "Big O Chart")
 
-### Common Runtimes
+### Common Data Structure Operations
+![alt text](https://github.com/djstein/study-guide/ "Common Data Structures")
 
-* O(N)
-* O(N Log N)
-
-## Interview Questions
-
-1. Build the layout for common web applications such as X
-2. Implement widgets like a date picker, carousel, or e-commerce cart
-3. Write a function for debounce
-4. Write a function to clone an object deeply
+### Array Sorting Algorithms
+![alt text](https://github.com/djstein/study-guide/ "Array Sorting Algorithms")
 
 notes:
-
-* http://bigocheatsheet.com/
 * http://davidshariff.com/blog/preparing-for-a-front-end-web-development-interview-in-2017/
+* https://medium.com/javascript-scene/functional-mixins-composing-software-ffb66d5e731c
