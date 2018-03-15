@@ -705,13 +705,13 @@ Data from the Application layer is moved throughout the internet via the Transpo
 ## Time Complexities
 
 ### Big O
-![alt text](https://github.com/djstein/study-guide/ "Big O Chart")
+![alt text](https://raw.githubusercontent.com/djstein/study-guide/master/chart.png?token=AIHCkKdTnsaLdEp_HILzXdIHGoTp6JCtks5asxRYwA%3D%3D "Big O Chart")
 
 ### Common Data Structure Operations
-![alt text](https://github.com/djstein/study-guide/ "Common Data Structures")
+![alt text](https://raw.githubusercontent.com/djstein/study-guide/master/data-structures.png?token=AIHCkL1Zfm0TVPBPNTSw_pSVyoN7o0dMks5asxSKwA%3D%3D "Common Data Structures")
 
 ### Array Sorting Algorithms
-![alt text](https://github.com/djstein/study-guide/ "Array Sorting Algorithms")
+![alt text](https://raw.githubusercontent.com/djstein/study-guide/master/sorting-algorithms.png?token=AIHCkMCi_Jcj3JdmYSYETPlErCILPhGsks5asxSfwA%3D%3D "Array Sorting Algorithms")
 
 notes:
 * http://davidshariff.com/blog/preparing-for-a-front-end-web-development-interview-in-2017/
