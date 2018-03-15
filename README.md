@@ -657,13 +657,26 @@ Data from the Application layer is moved throughout the internet via the Transpo
 
 ### Seperation of Concerns
 
-* Moderl View Controler
+* Model View Controler
 * Model View ViewModel
 * Model View Presenter
 
 ### Multi Device Support
-
-### Asset Delivery
+- use of Babel and Polyfil
+- React whenever possible, update to React Native or Electron when needed
+- Ensure that older devices are supported by using CSS.supports()
+```
+@supports (display: grid) {
+  div {
+    display: grid;
+  }
+}
+@supports not (display: grid) {
+  div {
+    float: right;
+  }
+}
+```
 
 ## Web Performance
 
