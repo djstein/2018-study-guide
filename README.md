@@ -705,21 +705,14 @@ Data from the Application layer is moved throughout the internet via the Transpo
 ## Time Complexities
 
 ### Big O
+![alt text](https://github.com/djstein/study-guide/ "Big O Chart")
 
-### Common Runtimes
+### Common Data Structure Operations
+![alt text](https://github.com/djstein/study-guide/ "Common Data Structures")
 
-* O(N)
-* O(N Log N)
-
-## Interview Questions
-
-1. Build the layout for common web applications such as X
-2. Implement widgets like a date picker, carousel, or e-commerce cart
-3. Write a function for debounce
-4. Write a function to clone an object deeply
+### Array Sorting Algorithms
+![alt text](https://github.com/djstein/study-guide/ "Array Sorting Algorithms")
 
 notes:
-
-* http://bigocheatsheet.com/
 * http://davidshariff.com/blog/preparing-for-a-front-end-web-development-interview-in-2017/
 * https://medium.com/javascript-scene/functional-mixins-composing-software-ffb66d5e731c
