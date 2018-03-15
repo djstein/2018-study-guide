@@ -670,14 +670,40 @@ Data from the Application layer is moved throughout the internet via the Transpo
 ### Critical Rendering Path
 
 ### Service Workers
+- does not work in Safari
+- does not work in Private Browsing
+- runs on seperate JavaScript thread
+```example: navigator.serviceWorker.registger(url, obj).then({}).catch({});```
 
 ### Image Optimizations
 
 ### Lazy Loading and Bundle Splitting
+- Lazy Loading: defer loading of resource until needed. Typically used for images that do not need to be shown if portion of page they will display on is not navigated too. With Webpack we can lazy load JS modules.
+- Bundle Splitting: use webpack to split JS bundles. Have specific bundles only loaded on specific page loads
 
 ### HTTP/2 and Server Push, Websockets
+- HTTP/2: encapsulating HTTP into frames
+- Multiplex: where multiple streams are open to a client <-> server, one connection per resource FROM the server where headers and data live, and one connection per request from the client. Allows for multiple requests at once instead of one after the next.
+- Server Push: "cache push", knows that if resource x is asked for, it probably needs y and sends it before being asked for.
+- Web Servers such as Nginx can support HTTP/2 connections.
 
-### Prefetch and Preload
+- Websockets: communicate session between client and server. messages can be sent and recieved without having to poll the server for replies.
+- Made up of three interfaces:
+WebSocket: interface to connect to WebSocket server then send and receive data on the connection
+CloseEvent: event sent by WebSocket object when connection closes
+MessageEvent: event sent by WebSocket object when message is received from server
+
+### Preload and Prefetch
+Preload: programatically force the browser to request a resouce without blocking the onload event
+- Preload on average shows a 12% increase in initial paint
+- Use for fonts, css, small bundles
+Prefect: hint to browser that resource might be needed, uses idle time after initial page load to get these items
+```
+<link rel="preload" href="..." as="style|script>
+<link rel="prefetch" href="...">
+```
+use `crossorigin="anonymous"` for items like fonts stored on different servers
+While out of scope, it is important to know that preloading can be achieved in JavaScript
 
 ### Browser Layout, Compositing, and Painting
 
