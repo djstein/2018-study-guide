@@ -594,10 +594,52 @@ High Order Components are just functions that take an exisiting component and re
 * data-\*
 
 ## HTTP Protocol
+HTTP: hypertext transfer protocol
+- Functions as request-response protocol in client-server computing
+HTTP Methods/Verbs: indicate action to be performed on resource.
+- Include GET, POST, PATCH, PUT, DELETE.
+- One resource (URL) can have multiple methods
+- HTTP requests say give me this or do something on a server.
+- HTTP response says I did this or take this <resource> with success/error messaging.
+Status Codes:
+  1. Informational 1XX
+  2. Successful 2XX: 200 OK
+  3. Reidrection 3XX: 304 Not Modified (cached asset has not changed)
+  4. Client Error 4XX: 404 Not Found
+  5. Server Error 5XX: 500 Internal Service Error
 
 ## REST vs RPC
+RPC is designed in URL structure to have a seperate resource available for each action
+REST supplies multiple actions TO the resource for an "object"
+RPC:
+```
+localtest.me:8000/order/create // post with data
+localtest.me:8000/order/get?id=1 // get with query params
+localtest.me:8000/order/update?id=1 // patch with query param and data
+localtest.me:8000/order/delete?id=1 // delete with query param
+```
+REST:
+```
+localtest.me:8000/order/ // post with data, or get all orders
+localtest.me:8000/order/1/ // get detail view, or delete, or patch
+```
 
 ## 7 Layers of OSI Model
+
+Internet Protocol Suite:
+1. Application
+2. Transport
+3. Internet
+4. Link
+Data from the Application layer is moved throughout the internet via the Transport layer. TCP/UDP packets wrap HTTP and are moved along via the Internet and Link Layers.
+
+1. Physical: ie. Ethernet
+2. Data Link: node to node data transfer, how two nodes directly communicate. ie. MAC
+3. Network: provides means to transfer datagramsby establishing use routing and address management protocols
+4. Transport: UDP, TCP handles sending data and recovering from errors
+5. Session: Manage connection between computers (server to user)
+6. Presentation: user has semantic / affordance that effects application
+7. Application: Software that communicates over network
 
 ## System Design
 
@@ -641,13 +683,24 @@ High Order Components are just functions that take an exisiting component and re
 
 ## Security
 
-### JSONP
+### JSON with Padding (JSONP)
+- basically never do this dumb ass shit (how CSRF problems came about)
+- used to bypass Cross-Domain policies in web browsers
+- use script tag to pass JSON data back to a function and evaluate it
 
-### CORS
+### Cross-Origin Resource Sharing (CORS) aka HTTP Access Control
+- allowing clinets to interact with APIs that are hosted on different domains.
+- CORS works by requiring the server to include set of HTTP Headers that allow a browser to deterine if and when cross-domain requests should be allowed.
+- Modern browsers and servers block Cross-Origin HTTP Requests (XHTTP) by default and we must supply specific IP Address / clients / domains that we will allow.
 
-### CSRF
+### Cross Site Request Forgery (CSRF)
+- type of attack which can occur when a user has not logged out of a site, and continues to have a valid session. Malicious site may be able to perform actions against target site within context of logged in session.
+- CSRF Tokens should always be required in HTTP Headers, Cookies, POST data, OR in Session data.
 
 ### iFrame Policies
+- essentially Cross-Origin iFrames can display information being added to them, but will not share that information with the window/DOM it is in unless specified.
+- the parent window can also know about user actions on the iFrame such as blur, focus, etc
+- Example: Typing in a Stripe Elements form. We know the iFrame is active but not what is being sent into the iFrame
 
 ## Time Complexities
 
