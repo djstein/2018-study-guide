@@ -31,16 +31,16 @@
 * Dates: built in JavaScript date utility Date. If no arguments passed, creates
   a new Date object with current date and time. Used as a uniform object for
   determing time.
-* Arrays: regular obejcts in which there is a particular relatoinshiop between
+* Arrays: regular objects in which there is a particular relationship between
   integer-key-ed properties and the length property. Inherits from
   `Array.prototype`. Represent lists or sets.
 * Typed Arrays: introduced in ES6, present an array-like view of underlying
-  binrary data buffer. Have many C equivalents.
-* Maps: ES6, like an object, but keys can be of function, object, or any
+  binary data buffer. Have many C equivalents.
+* Maps: (ES6) like an object, but keys can be of function, object, or any
   primitive over a `String` or `Symbol`. Size of a Map can be easily determined
   with `.size` . Can be directly iterated. USED for frequent addition / removal
   of key pairs
-* Sets: ES6, interger key based object that returns a set (only one of each
+* Sets: ES6) interger key based object that returns a set (only one of each
   unique object inside of the data structure)
 * WeakMaps: ES6, same as Map BUT can only be OBJECTS only, no arbitrary value of
   any type
@@ -50,8 +50,6 @@
   send data
 
 While more objects exisit, they are out of scope for this guide.
-
-Use `typeof` to determine type of a variable. `typeof x`
 
 ### Execution Context
 
@@ -98,7 +96,7 @@ var val = 'wow';
 boo()
 // wow
 ```
-* closures are best used when using nested functions with ability of `that = this`.
+* closures are best used when using nested functions with ability of lexical this aka `that = this`.
 
 ### Controlling `this`
 
@@ -237,8 +235,30 @@ console.log('Is rect an instance of Shape?',
 rect.move(1, 1); // Outputs, 'Shape moved.'
 ```
 
+#### ES6 Classes
+* Syntax sugar around Prototypes, no new object type
+* Class declaratoins are not hoisted, they must be declared firsted and then accessed
+```javascript
+class Reactangle {
+  constructor(height, width) {
+    this.height = height;
+    this.width = width;
+  }
+  // Method
+  calcArea() {
+    return this.height * this.width;
+  }
+}
+// unmaned
+const Rectangle = class {...};
+// named
+const Rectangle = class Rectangle {...};
+```
+* `static` keyword defines a static method for the class, supply an object of the class to the function
+* Use `extends` to subclass `class Rectangle extends Shape {...} `
+
 #### Mixins
-the process of decomposing an object(s) into a single object so that the final product has access to the deomposed keys value paris.
+- The process of decomposing an object(s) into a single object so that the final product has access to the deomposed keys value paris.
 ```javascript
 const chocolate = {
   hasChocolate: () => true
@@ -262,18 +282,20 @@ console.log(`
   hasCaramelSwirl: ${ iceCream.hasCaramelSwirl() }
   hasPecans: ${ iceCream.hasPecans() }
 `);
-
-hasChocolate: true
-hasCaramelSwirl: true
-hasPecans: true
+// hasChocolate: true
+// hasCaramelSwirl: true
+// hasPecans: true
 ```
 
 ### Composition and high order funcitons
-Composition is the process of combining two or more functions to produce a new function. They are evaluated from innermost variable and function to outter.
+- Composition is the process of combining two or more functions to produce a new function. They are evaluated from innermost variable and function to outter.
 
-A high order function is one that can:
-- take a function as an argument
-- return a function as a result
+- A high order function is one that can:
+
+  1. take a function as an argument
+
+  2. return a function as a result
+
 
 ```javascript
 const twice = (f, v) => f(f(v));
@@ -283,23 +305,27 @@ twice(add3, 7); // 13
 ```
 
 ### Event delegatoin and bubbling
-Event Listener is something that waits for elements in the DOM to be interacted with.
-Examples of events include: load, keydown, mouseover, mouseout, click, change, etc.
-With vanillia JS:
+
+#### Event Liseners
+* Event Listener is something that waits for elements in the DOM to be interacted with.
+* Examples of events include: load, keydown, mouseover, mouseout, click, change, etc.
+
 ```javascript
 const handleSumbit = e => {...};
 const button = document.getElementById('submit-button');
 button.addEventListener('click', handleSumbit);
 ```
 - event.target: identifies the HTML element on which an event occured
-- event.currentTarget:  refers to the element to which the event listener has been attached
+- event.currentTarget: refers to the element to which the event listener has been attached
 
-Event Bubbling:
+#### Event Bubbling:
 - when an event is triggered it propigates through all parents until it is caught by an event handler
 - event handlers defined on a parent will apply to child nodes, even those that are added to the DOM after the page loads
 
 ### Type Coercion using typeof, instanceof and Object.proptype.toString
-- typeof: returns a string indicating the type of the operand.
+
+#### typeof
+- returns a string indicating the type of the operand.
 ```javascript
 typeof null === 'object';
 typeof true === 'boolean';
@@ -314,7 +340,8 @@ typeof Math.sin === 'function';
 typeof new Boolean(true) === 'object'; // Using the new operator results in an object.
 ```
 
-- instanceof: tests whether the `proptype` property of a constructor appears anywhere in the prototype chain of an object.
+#### instanceof
+- tests whether the `proptype` property of a constructor appears anywhere in the prototype chain of an object.
 ```javascript
 Syntax: object instanceof constructor
 var simpleStr = 'This is a simple string'; 
@@ -324,39 +351,32 @@ newStr    instanceof String; // returns true
 myString  instanceof Object; // returns true
 ```
 
-- Object.proptype.toString: every object has a .toString() method that is called when the object is to be represented as a text value or when a String is expected. It can be overwritten to have a custom string valu.
+#### Object.proptype.toString
+- every object has a .toString() method that is called when the object is to be represented as a text value or when a String is expected. It can be overwritten to have a custom string valu.
 - If not overwritten it will print "[object type]" where type is the object type.
 ```javascript
 var o = new Object();
 o.toString(); // return [object Object]
 ```
 
-- Overwritting: new function will be called automatically or implicitly
-```javascript
-function Cat(x){this.x=x};
-c = new Cat('meow');
-Cat.prototype.toString = function makeNoise() {return this.x};
-c.toString() // 'meow'
-```
-
 ### Asynchronous calls with callbacks, promises, await and async
 
-Callbacks
+#### Callbacks
 - Callbacks (standard def): a function passed into another function as an argument (aka composition)
 - Callbacks (asynchronous): used to continue code execution after an asynchronous operation has completed.
 - Since functions take time to complete, their return value (weither assigned to a variable or not) will be undefined until it completes.
 - Asynchronous callbacks are achieved when a function is provided a function as its final argument. When the function completes with its normal arguments it will then call the second function with its own values.
-*Function A with params X returns Y as argument for Function B.*
+- Function A with params X returns Y as argument for Function B.
 - Use modules to break apart callback functions. (another time http://callbackhell.com/)
 
-Promises
+#### Promises
 - Promise: a proxy for a value not necessarily known when the promise is created.
 - Lets asynchronous methods return values like synchronous methods, it is returning a promise that the value will be supplied in the future
-Promises have three states:
-1. pending: initial state, neither fulfilled nor rejected
-2. fulfilled: meaning that the operation completed successfully
-3. rejected: meaning that hte operation failed
-if the Promise moves beyond pending, the then method is called.
+- Promises have three states:
+  1. pending: initial state, neither fulfilled nor rejected
+  2. fulfilled: meaning that the operation completed successfully
+  3. rejected: meaning that hte operation failed
+- if the Promise moves beyond pending, the then method is called.
 ```javascript
 function test() {
   const p1 = new Promise((resolve, reject) => {
@@ -375,13 +395,11 @@ function test() {
 }
 ```
 
-Await + Async
+#### Await + Async
 - Async Functions: declare a function as such, returning an AsyncFunction. 
 - Await: operator used to wait for a Promise to move out of the pending state.
-
 - When async functions are called, they return a Promise. When a value or exception is returned the Promise will be resolved with the returned value or thrown error.
-- Async functions can contain await expressions that pauce the execution of the function until the Promise resolves, where it then resumes afterward.
-
+- Async functions can contain await expressions that pause the execution of the function until the Promise resolves, where it then resumes.
 ```javascript
 const resolveAfter = x => {
   return new Promise(resolve => {
@@ -397,8 +415,7 @@ const add = async (a) => {
 }
 add(10).then(v => {console.log(v);}); // prints 60 after 4 seconds
 ```
-
-Promise chain to async function:
+- Promise chain to async function:
 ```javascript
 const getData = url => {
   return downloadData(url) // returns a promise
@@ -409,9 +426,8 @@ const getData = url => {
       return processDataInWorker(url); // returns a promise
   });
 }
-```
 
-```javascript
+// to promoise based
 const getData = async url => {
   let v;
   try {
@@ -425,19 +441,22 @@ const getData = async url => {
 - Return statements of async functions are wrapped in Promise.resolve, thus no await is needed on the return line if it is a function or Promise variable.
 
 ### When to use fuction declarations and expressions
-Function Declarations: can be called before or after its definition via hoisting
+#### Function Declarations:
+- can be called before or after its definition via hoisting
 ```javascript
 function foo() {...};
 ```
-Named Function Expressions: can only be called after initialized and JIT
+#### Named Function Expressions:
+- can only be called after initialized and JIT
 ```javascript
 const foo = function bar() {...};
 ```
-Anonymous Function Expressions: can only be called after initialized and JIT
+#### Anonymous Function Expressions:
+- can only be called after initialized and JIT
 ```javascript
 const foo = () => {};
 ```
-Immediately-Invoked Function Expressions: 
+#### Immediately-Invoked Function Expressions
 ```javascript
 ((x) => {...})();
 ```
@@ -446,14 +465,14 @@ Immediately-Invoked Function Expressions:
 
 ### Container Component Model
 
-Container Components:
+#### Container Components:
 - how things work
 - no DOM markup, no styles
 - calls global states / stores
 - data stored in state
 - typically generated from high order components such as connect() from Redux
 
-Presentational Components:
+#### Presentational Components:
 - how things look
 - no dependenciees to rest of application or global stores
 - written as functional components
@@ -461,7 +480,7 @@ Presentational Components:
 - receive data and callbacks via props
 - allow containment via this.props.children
 
-Benefits:
+#### Benefits:
 - separation of concerns
 - better reusability of presentation components
 - product team can tweak presentational components without changing logic
@@ -471,39 +490,44 @@ Benefits:
 ### The Component Lifecycle
 - methods available when components get created and inserted into the DOM, updates, becomes unmounted, or removed.
 
-Mounting: called when instance of component is being created and inserted into the DOM
-constructor(props)
-componentWillMount()
-render()
-componentDidMount() great for requests
+#### Mounting
+- called when instance of component is being created and inserted into the DOM
+  1. constructor(props)
+  2. componentWillMount()
+  3. render()
+  4. componentDidMount() great for requests
 
-Updating: changes to props or state cause component to rerender
-componentWillReceiveProps(nextProps)
-shouldComponentUpdate(nextProps, nextState) returns true or false, to trigger the next two
-componentWillUpdate(nextProps, nextState)
-render()
-componentDidUpdate(prevProps, prevState) good place to do network requests if props are changed
+#### Updating
+- changes to props or state cause component to rerender
+  1. componentWillReceiveProps(nextProps)
+  2. shouldComponentUpdate(nextProps, nextState) returns true or false, to trigger the next two
+  3. componentWillUpdate(nextProps, nextState)
+  4. render()
+  5. componentDidUpdate(prevProps, prevState) good place to do network requests if props are changed
 
-Unmounting: component is being removed from DOM
-componentWillMount() perform cleanup here, cancel network requests, subscriptions, etc
+#### Unmounting
+- component is being removed from DOM
+  1. componentWillMount() perform cleanup here, cancel network requests, subscriptions, etc
 
-Error Handling: error during rendering, lifecycle method, or constructor of child component
-componentDidCatch() only catches errors lower in the tree, not on itself
+#### Error Handling
+- error during rendering, lifecycle method, or constructor of child component
+  1. componentDidCatch() only catches errors lower in the tree, not on itself
 
 ### State
 - object managed within the component
 - calling set state merges key value pairs on the objects passed into the current state
 
 ### Context
-- safe context is being developed in React 16.3
 
-Lifecycle methods that recieve additional param when contextTypes is defined:
-- constructor(props, context)
-- componentWillRecieveProps(nextProps, nextContext)
-- shouldComponentUpdate(nextProps, nextState, nextContext)
-- componentWillUpdate(nextProps, nextState, nextContext)
+#### Lifecycle Methods 
+- Component recieve additional param when contextTypes is defined:
+  1. constructor(props, context)
+  2. componentWillRecieveProps(nextProps, nextContext)
+  3. shouldComponentUpdate(nextProps, nextState, nextContext)
+  4. componentWillUpdate(nextProps, nextState, nextContext)
 
-Using childContextTypes and getChildContext, React passed context info to each component in the subtree that accesses contextTypes
+#### childContextTypes and getChildContext
+- React passes context info to each component in the subtree that accesses contextTypes
 ```javascript
 import PropTypes from 'prop-types';
 (stateless functional component version of Button)
@@ -533,7 +557,7 @@ MessageList.childContextTypes = {
 };
 ```
 
-Such as in React Router 4, a Router sends information to each Link and Route which pass values back to the Router:
+- Such as in React Router 4, a Router sends information to each Link and Route which pass values back to the Router:
 ```javascript
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 const Example = () => (
@@ -594,14 +618,17 @@ High Order Components are just functions that take an exisiting component and re
 * data-\*
 
 ## HTTP Protocol
-HTTP: hypertext transfer protocol
+
+### HTTP
+- hypertext transfer protocol
 - Functions as request-response protocol in client-server computing
-HTTP Methods/Verbs: indicate action to be performed on resource.
+#### HTTP Methods/Verbs
+- indicate action to be performed on resource.
 - Include GET, POST, PATCH, PUT, DELETE.
 - One resource (URL) can have multiple methods
 - HTTP requests say give me this or do something on a server.
 - HTTP response says I did this or take this <resource> with success/error messaging.
-Status Codes:
+- Status Codes:
   1. Informational 1XX
   2. Successful 2XX: 200 OK
   3. Reidrection 3XX: 304 Not Modified (cached asset has not changed)
@@ -609,45 +636,39 @@ Status Codes:
   5. Server Error 5XX: 500 Internal Service Error
 
 ## REST vs RPC
-RPC is designed in URL structure to have a seperate resource available for each action
-REST supplies multiple actions TO the resource for an "object"
-RPC:
+- RPC is designed in URL structure to have a seperate resource available for each action
+- REST supplies multiple actions TO the resource for an "object"
 ```
+# RPC:
 localtest.me:8000/order/create // post with data
 localtest.me:8000/order/get?id=1 // get with query params
 localtest.me:8000/order/update?id=1 // patch with query param and data
 localtest.me:8000/order/delete?id=1 // delete with query param
-```
-REST:
-```
+# REST:
 localtest.me:8000/order/ // post with data, or get all orders
 localtest.me:8000/order/1/ // get detail view, or delete, or patch
 ```
 
 ## 7 Layers of OSI Model
 
-Internet Protocol Suite:
-1. Application
-2. Transport
-3. Internet
-4. Link
-Data from the Application layer is moved throughout the internet via the Transport layer. TCP/UDP packets wrap HTTP and are moved along via the Internet and Link Layers.
+### Internet Protocol Suite:
+- Data from the Application layer is moved throughout the internet via the Transport layer. TCP/UDP packets wrap HTTP and are moved along via the Internet and Link Layers.
+  1. Application
+  2. Transport
+  3. Internet
+  4. Link
 
-1. Physical: ie. Ethernet
-2. Data Link: node to node data transfer, how two nodes directly communicate. ie. MAC
-3. Network: provides means to transfer datagramsby establishing use routing and address management protocols
-4. Transport: UDP, TCP handles sending data and recovering from errors
-5. Session: Manage connection between computers (server to user)
-6. Presentation: user has semantic / affordance that effects application
-7. Application: Software that communicates over network
+- Full Seven Layers
+
+  1. Physical: ie. Ethernet
+  2. Data Link: node to node data transfer, how two nodes directly communicate. ie. MAC
+  3. Network: provides means to transfer datagramsby establishing use routing and address management protocols
+  4. Transport: UDP, TCP handles sending data and recovering from errors
+  5. Session: Manage connection between computers (server to user)
+  6. Presentation: user has semantic / affordance that effects application
+  7. Application: Software that communicates over network
 
 ## System Design
-
-### Rendering
-
-* Client Side
-* Server Side
-* Universral Rendering
 
 ### Layout
 
@@ -662,9 +683,9 @@ Data from the Application layer is moved throughout the internet via the Transpo
 * Model View Presenter
 
 ### Multi Device Support
-- use of Babel and Polyfil
-- React whenever possible, update to React Native or Electron when needed
-- Ensure that older devices are supported by using CSS.supports()
+* use of Babel and Polyfil
+* React whenever possible, update to React Native or Electron when needed
+* Ensure that older devices are supported by using CSS.supports()
 ```
 @supports (display: grid) {
   div {
@@ -681,20 +702,23 @@ Data from the Application layer is moved throughout the internet via the Transpo
 ## Web Performance
 
 ### Critical Rendering Path
-- Critical Rendering Path: prioritizing display of content that relates to current user action
-Steps to render:
-1. process HTML markup and build DOM tree
-2. process CSS markup and build CSSOM tree
-3. Combine DOM and CSSOM into render tree
-4. run layout on render tree to computer geometry of each node
-5. pain indivial nodes to screen
 
-- Critical Resource: is one that could block intial rendering of the page
-Steps to optimize:
-1. Analyze critical path (number of resources, bytes, length)
-2. Minimize critical resources (mark as async, defer download, remove)
-3. Optimize critical bytes to reduce download time (number of roundtrips)
-4. Optimize order in which critical resouces are downloaded, download all critical early as possible and together
+#### Critical Rendering Path
+- prioritizing display of content that relates to current user action
+- Steps to render:
+  1. process HTML markup and build DOM tree
+  2. process CSS markup and build CSSOM tree
+  3. Combine DOM and CSSOM into render tree
+  4. run layout on render tree to computer geometry of each node
+  5. pain indivial nodes to screen
+
+#### Critical Resource
+- is one that could block intial rendering of the page
+- Steps to optimize:
+  1. Analyze critical path (number of resources, bytes, length)
+  2. Minimize critical resources (mark as async, defer download, remove)
+  3. Optimize critical bytes to reduce download time (number of roundtrips)
+  4. Optimize order in which critical resouces are downloaded, download all critical early as possible and together
 
 ### Service Workers
 - does not work in Safari
@@ -710,32 +734,41 @@ Steps to optimize:
 - compress images and store in caches that do no require webserver interaction
 
 ### Lazy Loading and Bundle Splitting
-- Lazy Loading: defer loading of resource until needed. Typically used for images that do not need to be shown if portion of page they will display on is not navigated too. With Webpack we can lazy load JS modules.
-- Bundle Splitting: use webpack to split JS bundles. Have specific bundles only loaded on specific page loads
+#### Lazy Loading
+- defer loading of resource until needed. Typically used for images that do not need to be shown if portion of page they will display on is not navigated too. With Webpack we can lazy load JS modules.
+#### Bundle Splitting
+- use webpack to split JS bundles. Have specific bundles only loaded on specific page loads
 
 ### HTTP/2 and Server Push, Websockets
-- HTTP/2: encapsulating HTTP into frames
-- Multiplex: where multiple streams are open to a client <-> server, one connection per resource FROM the server where headers and data live, and one connection per request from the client. Allows for multiple requests at once instead of one after the next.
-- Server Push: "cache push", knows that if resource x is asked for, it probably needs y and sends it before being asked for.
+#### HTTP/2
+- encapsulating HTTP into frames
 - Web Servers such as Nginx can support HTTP/2 connections.
-
-- Websockets: communicate session between client and server. messages can be sent and recieved without having to poll the server for replies.
+#### Multiplex
+- where multiple streams are open to a client <-> server, one connection per resource FROM the server where headers and data live, and one connection per request from the client. Allows for multiple requests at once instead of one after the next.
+#### Server Push
+- "cache push", knows that if resource x is asked for, it probably needs y and sends it before being asked for.
+#### Websockets
+- communicate session between client and server. messages can be sent and recieved without having to poll the server for replies.
 - Made up of three interfaces:
-WebSocket: interface to connect to WebSocket server then send and receive data on the connection
-CloseEvent: event sent by WebSocket object when connection closes
-MessageEvent: event sent by WebSocket object when message is received from server
+  1. WebSocket: interface to connect to WebSocket server then send and receive data on the connection
+  2. CloseEvent: event sent by WebSocket object when connection closes
+  3. MessageEvent: event sent by WebSocket object when message is received from server
 
 ### Preload and Prefetch
-Preload: programatically force the browser to request a resouce without blocking the onload event
+### Preload:
+- programatically force the browser to request a resouce without blocking the onload event
 - Preload on average shows a 12% increase in initial paint
 - Use for fonts, css, small bundles
-Prefect: hint to browser that resource might be needed, uses idle time after initial page load to get these items
+- While out of scope, it is important to know that preloading can be achieved in JavaScript
 ```
 <link rel="preload" href="..." as="style|script>
+```
+### Prefect
+- hint to browser that resource might be needed, uses idle time after initial page load to get these items
+```
 <link rel="prefetch" href="...">
 ```
-use `crossorigin="anonymous"` for items like fonts stored on different servers
-While out of scope, it is important to know that preloading can be achieved in JavaScript
+- use `crossorigin="anonymous"` for items like fonts stored on different servers
 
 ### Browser Layout, Compositing, and Painting
 
