@@ -21,22 +21,22 @@
 
 ## What are the differences between Long-Polling, Websockets and Server-Sent Events?
 
-- Long-Polling
-- Websockets
-- Server-Sent Events
+- Long-Polling: client constantly asks the server for new information via request + response
+- Websockets: port 443 is used to keep a connection open where MessageEvent objects are sent back and forth 
+- Server-Sent Events: JS simply listens for events streamed from the server (good for stock picker, twitter feed update)
 
 ## Explain the following request and response headers:
 
   * Diff. between Expires, Date, Age and If-Modified-...
 
-  * Do Not Track
+  * Do Not Track: disable tracking / cross site tracking
 
-  * Cache-Control
+  * Cache-Control: specifies how to cache specific items, can specificy if cache should be done at multi level caches, never, if has experiation,  
 
-  * Transfer-Encoding
+  * Transfer-Encoding: how the data being sent to user should be sent. typically use gzip
 
-  * ETag
+  * ETag: used for retrieving specific version of resource
 
-  * X-Frame-Options
+  * X-Frame-Options: indicate if data should be rendered in frame, iframe, or object. use this to avoid clickjacking.
   
 ## What are HTTP methods? List all HTTP methods that you know, and explain them.
