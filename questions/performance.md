@@ -1,8 +1,17 @@
 # Performance Questions:
 
-* What tools would you use to find a performance bug in your code?
+## What tools would you use to find a performance bug in your code?
 
-* What are some ways you may improve your website's scrolling performance?
+- for vanilla JS, DOM, or CSSOM rendering we can use the Firefox Development Performance tools
+- Flame Chart: JavaScript call stack over course
+- Call Time: shows JavaScript functions in which browser spent most of time
+- Waterfall: shows different operations the browser was performing (layout, JS, repaints, garbage, etc)
 
-* Explain the difference between layout, painting and compositing.
+## What are some ways you may improve your website's scrolling performance?
 
+-
+
+## Explain the difference between layout, painting and compositing.
+- Layout:
+- Painting:
+- Compositing:
