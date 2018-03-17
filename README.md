@@ -596,7 +596,13 @@ High Order Components are just functions that take an exisiting component and re
 
 ## CSS
 
-### Layout
+### PIXEL PIPELEMTN
+
+* JavaScript: handle visual changes to data that requires rerender
+* Style Calculations: determine which CSS rules to apply to element
+* Layout: calculate space for object based on rules (very invovled)
+* Paint: filling in pixels, draw multiple layers to form visuals
+* Compositing: draw the layers in correct order (correct overlapping, etc)
 
 ### Responsive Design
 
