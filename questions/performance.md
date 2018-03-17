@@ -12,6 +12,6 @@
 -
 
 ## Explain the difference between layout, painting and compositing.
-- Layout:
-- Painting:
-- Compositing:
+* Layout: calculate space for object based on rules (very invovled)
+* Paint: filling in pixels, draw multiple layers to form visuals
+* Compositing: draw the layers in correct order (correct overlapping, etc)
