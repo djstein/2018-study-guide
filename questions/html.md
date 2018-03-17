@@ -21,3 +21,5 @@
 * Why you would use a `srcset` attribute in an image tag? Explain the process the browser uses when evaluating the content of this attribute.
 
 * Have you used different HTML templating languages before?
+
+- yes, use Handlebars, Jinja, Django Templating language, among others in server side rendering to achieve HTML output that has variables or portions added programatically
