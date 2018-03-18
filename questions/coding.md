@@ -86,3 +86,23 @@ doSomething().then(doSomethingElse())
 
 doSomething().then(doSomethingElse)
 ```
+
+## Question: Create a for loop that iterates up to `100` while outputting fizz at multiples of `3`, buzz at multiples of `5` and fizzbuzz at multiples of `3` and `5`
+
+```javascript
+for (let i = 0; i <= 100; i++) {
+    let f = i % 5 ? 'fizz' : ''
+    let b = i % 3 ? 'buzz' : ''
+    Boolean(f || b) ? console.log(`${f}${b}`) : null
+}
+```
+
+## Question: Write this function in one pass
+
+```javascript
+duplicate([1, 2, 3, 4, 5]) // [1,2,3,4,5,1,2,3,4,5]
+
+duplicate = arr => {
+    return arr.concat(arr)
+}
+```
