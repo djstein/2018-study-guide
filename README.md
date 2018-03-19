@@ -307,7 +307,8 @@ twice(add3, 7); // 13
 ### Event delegatoin and bubbling
 
 #### Event Liseners
-* Event Listener is something that waits for elements in the DOM to be interacted with.
+* Event Listener is something that waits for elements in the 
+to be interacted with.
 * Examples of events include: load, keydown, mouseover, mouseout, click, change, etc.
 
 ```javascript
@@ -587,12 +588,43 @@ High Order Components are just functions that take an exisiting component and re
 ### Traversing the DOM
 
 * Finding Nodes:
+
+document.getElementById();
+document.getElementsByClassName();
+
 * Traversing Up and Down:
 * Traversing Left and Right:
 * Adding Node:
 * Deleting Node:
 * Copying Node:
-* Performance:
+
+DFS // pop off of array
+```javascript
+let stack = [];
+stack.push(document.body);
+
+while (stack.length > 0) {
+  current = stack.pop();
+  console.log(current);
+  current.forEach( child => {
+    stack.push(child);
+  });
+}
+```
+
+BFS
+```javascript // shift off of array
+let queue = [];
+stack.push(document.body);
+
+while (stack.length > 0) {
+  current = stack.shift();
+  console.log(current);
+  current.forEach( child => {
+    stack.unshift(child);
+  });
+}
+```
 
 ## CSS
 
